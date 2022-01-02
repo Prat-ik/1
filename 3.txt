@@ -1,0 +1,93 @@
+/* Implementation of SHA-1 Using API */
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.security.DigestInputStream;
+import java.security.DigestOutputStream;
+import java.security.MessageDigest;
+import java.security.Security;
+import java.io.*;
+
+
+// Basic IO example using SHA1
+ 
+
+
+public class SHA1
+{
+  public static void main(String[] args) throws Exception 
+  {
+	 FileInputStream fstream = new FileInputStream("textfile.txt");
+
+	 DataInputStream in = new DataInputStream(fstream);
+  BufferedReader br = new BufferedReader(new      InputStreamReader(in));
+  String strLine;
+  strLine = br.readLine();
+            
+    byte[] input = strLine.getBytes();
+    System.out.println("input     : " + new String(input));    
+    MessageDigest hash = MessageDigest.getInstance("SHA1");
+
+ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(input);
+    DigestInputStream digestInputStream = new DigestInputStream(byteArrayInputStream, hash);
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+    int ch;
+    
+while ((ch = digestInputStream.read()) >= 0) {
+      byteArrayOutputStream.write(ch);
+    }
+
+    byte[] newInput = byteArrayOutputStream.toByteArray();
+    System.out.println("in digest : " + new String(digestInputStream.getMessageDigest().digest()));
+
+    byteArrayOutputStream = new ByteArrayOutputStream();
+    DigestOutputStream digestOutputStream = new DigestOutputStream(byteArrayOutputStream, hash);
+    digestOutputStream.write(newInput);
+    digestOutputStream.close();
+
+    System.out.println("out digest: " + new String(digestOutputStream.getMessageDigest().digest()));
+  }
+}
+
+
+/*--------------------------------------------------------
+
+tushar@Unicorn:~/Desktop/ICS/SHA1$ javac SHA1.java
+
+tushar@Unicorn:~/Desktop/ICS/SHA1$ java SHA1 textfile.txt 
+input     : ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+in digest : �	��� ӳ��L��x����
+out digest: �	��� ӳ��L��x����
+
+tushar@Unicorn:~/Desktop/ICS/SHA1$
+
+
+------------------------------------------------------------
+
+tushar@Unicorn:~/Desktop/ICS/SHA1$ javac SHA1.java
+
+tushar@Unicorn:~/Desktop/ICS/SHA1$ java SHA1 textfile.txt 
+input     : Welcome to PICT, Pune
+in digest : �[5i�f�\��+�_T#��y
+out digest: �[5i�f�\��+�_T#��y
+
+tushar@Unicorn:~/Desktop/ICS/SHA1$ 
+
+----------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
